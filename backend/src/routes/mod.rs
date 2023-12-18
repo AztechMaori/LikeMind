@@ -1,7 +1,7 @@
 
 
 use axum::
-{routing::get, Router, http::Method};
+{routing::{get, post}, Router, http::Method};
 
 use sea_orm::{DatabaseConnection, DbErr};
 use tower_http::cors::{CorsLayer, Any};
@@ -16,7 +16,10 @@ use json::{car_details,return_json};
 
 // SeaORM 
 mod db_query;
+use db_query::create_job;
 // use db_query::query_data; 
+
+
 
 #[derive(Clone)]
 pub struct AppState {
@@ -40,6 +43,7 @@ fn validate(database: Result<DatabaseConnection, DbErr>) -> Result<AppState, Str
 }
 
 
+ 
 
 
 pub fn create_routes(database:Result<DatabaseConnection, DbErr>) -> Router {
@@ -56,7 +60,8 @@ pub fn create_routes(database:Result<DatabaseConnection, DbErr>) -> Router {
     .route("/route", get(hello_world))
     .route("/json", get(return_json))
     .route("/car", get(car_details))
-    .with_state(validate(database))
+    .route("/trial", post(create_job))
+     .with_state(validate(database))
     .layer(cors);
 
     

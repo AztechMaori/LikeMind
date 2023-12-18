@@ -9,8 +9,8 @@ pub struct Model {
     pub job_id: i32,
     pub job_title: String,
     #[sea_orm(column_type = "Decimal(Some((10, 2)))", nullable)]
-    pub salary: Option<Decimal>,
-    pub user_id: Option<i32>,
+    pub salary: i32,
+    pub user_id: i32,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

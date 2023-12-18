@@ -1,5 +1,5 @@
 
-
+mod db;
 mod routes;
 use routes::create_routes;
 use sea_orm::Database;
@@ -8,10 +8,6 @@ use sea_orm::Database;
 pub async fn run(db_uri: &str){
 // connect SEAORM and DB 
 let database:Result<sea_orm::prelude::DatabaseConnection, sea_orm::prelude::DbErr> = Database::connect(db_uri).await;
-
-
-
-
 
 
 
