@@ -7,19 +7,20 @@ use sea_orm::DatabaseConnection;
 use tower_http::cors::{CorsLayer, Any};
 
 //hello world 
-mod hello_world;
-use  hello_world::hello_world;
+mod sign_up;
+use sign_up::SignUp; 
 
-// JSON
-mod json;
-use json::{car_details,return_json};
+//JWT
 
 // SeaORM 
-mod db_query;
-use db_query::create_job;
-// use db_query::query_data; 
+mod db_post;
+use db_post::create_job;
 
+mod db_get;
+use db_get::get_user;
 
+mod test;
+use test::trial; 
 
 
  
@@ -32,19 +33,20 @@ pub fn create_routes(database:DatabaseConnection) -> Router {
 
     
     let cors = CorsLayer::new()
+    .allow_headers(Any)
     .allow_methods([Method::GET, Method::POST])
     .allow_origin(Any);
+    
 
 
 
     return Router::new()
-    .route("/", get(|| async { "wassup,bitches!" }))
-    .route("/route", get(hello_world))
-    .route("/json", get(return_json))
-    .route("/car", get(car_details))
+    .route("/", get(trial))
+    .route("/route", post(SignUp))
     .route("/database", get(create_job))
-    .layer(cors)
+    .route("/user/:id", get(get_user))
     .layer(Extension(database))
+    .layer(cors)
 
     
 
