@@ -6,6 +6,8 @@ export default function SignUp() {
   const [password, setPassword] = createSignal("");
 
   async function handleSubmit() {
+    event?.preventDefault();
+
     const user_data = {
       username: username(),
       email: email(),
@@ -17,14 +19,47 @@ export default function SignUp() {
     try {
       const response = await fetch(url, {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(user_data),
       });
+      console.log(response);
+      setUsername("");
+      setPassword("");
+      setEmail("");
     } catch (err) {
       console.log(err);
     }
+  }
+
+  function cookie() {
+    const url = "http://localhost:3000/set";
+    try {
+      let res = fetch(url, {
+        credentials: "include",
+      });
+      console.log(res);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  function cookie_backend() {
+    const url = "http://localhost:3000/get";
+    try {
+      let res = fetch(url, {
+        credentials: "include",
+      });
+      console.log(`it worked! ${res}`);
+    } catch (err) {
+      console.log(`the error is ${err}`);
+    }
+  }
+
+  function show_doc_cookie() {
+    console.log(document.cookie);
   }
 
   return (
@@ -86,6 +121,9 @@ export default function SignUp() {
           Sign Up
         </button>
       </form>
+      <button onClick={cookie}>setting cookie</button>
+      <button onClick={cookie_backend}>cookie backend</button>
+      <button onClick={show_doc_cookie}> show broswer boockies</button>
     </div>
   );
 }
