@@ -68,7 +68,9 @@ pub async fn SignUp( Extension(database):Extension<DatabaseConnection>, jar:Cook
   match access_token {
     Ok(a_token) => {
       println!("the access token has been succesfully created: {}", a_token); 
-      let cookie = Cookie::build(("auth", a_token)).http_only(true); 
+      let auth_cookie = Cookie::build(("auth", a_token)).http_only(true); 
+     
+
 
       let refresh_token = encode_refresh_token();
 
@@ -96,7 +98,7 @@ pub async fn SignUp( Extension(database):Extension<DatabaseConnection>, jar:Cook
          match user_created {
              Ok(_) => {
               println!("user has been succesfully created"); 
-              Ok(jar.add(cookie))
+              Ok(jar.add(auth_cookie))
             
              }
              Err(error) => {

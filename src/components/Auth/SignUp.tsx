@@ -1,6 +1,10 @@
-import { createSignal } from "solid-js";
+import { createSignal, type Setter } from "solid-js";
 
-export default function SignUp() {
+interface Props {
+  setModal: Setter<boolean>;
+}
+
+export default function SignUp(props: Props) {
   const [username, setUsername] = createSignal("");
   const [email, setEmail] = createSignal("");
   const [password, setPassword] = createSignal("");
@@ -34,40 +38,15 @@ export default function SignUp() {
     }
   }
 
-  function cookie() {
-    const url = "http://localhost:3000/set";
-    try {
-      let res = fetch(url, {
-        credentials: "include",
-      });
-      console.log(res);
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
-  function cookie_backend() {
-    const url = "http://localhost:3000/get";
-    try {
-      let res = fetch(url, {
-        credentials: "include",
-      });
-      console.log(`it worked! ${res}`);
-    } catch (err) {
-      console.log(`the error is ${err}`);
-    }
-  }
-
-  function show_doc_cookie() {
-    console.log(document.cookie);
-  }
-
   return (
-    <div class="min-h-screen flex items-center justify-center">
+    <div class="min-h-screen flex items-center justify-center ">
       <form
         onSubmit={handleSubmit}
         class="bg-white p-8 shadow-md rounded-md w-96"
       >
+        <button onClick={() => props.setModal(true)} class=" mb-4">
+          click here to go to Login
+        </button>
         <h2 class="text-2xl font-bold mb-4">Sign Up</h2>
         <div class="mb-4">
           <label
@@ -121,9 +100,6 @@ export default function SignUp() {
           Sign Up
         </button>
       </form>
-      <button onClick={cookie}>setting cookie</button>
-      <button onClick={cookie_backend}>cookie backend</button>
-      <button onClick={show_doc_cookie}> show broswer boockies</button>
     </div>
   );
 }
