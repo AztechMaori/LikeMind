@@ -12,6 +12,8 @@ pub struct Model {
     #[sea_orm(unique)]
     pub salt: String,
     pub hashed_password: String,
+    #[sea_orm(column_type = "Text", nullable)]
+    pub refresh_token: Option<String>,
     #[sea_orm(unique)]
     pub email: String,
 }
