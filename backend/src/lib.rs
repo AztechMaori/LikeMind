@@ -20,7 +20,7 @@ async fn validate_connection(db:Result<DatabaseConnection,DbErr>){
 }
 
 
-pub async fn run(db_uri: &str){
+pub async fn run(db_uri: String){
 // connect SEAORM and DB 
 let database: Result<DatabaseConnection,DbErr> = Database::connect(db_uri).await;
 

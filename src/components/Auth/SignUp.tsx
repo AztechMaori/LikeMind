@@ -38,6 +38,15 @@ export default function SignUp(props: Props) {
     }
   }
 
+  async function cookie_backend() {
+    const url = "http://localhost:3000/time";
+
+    const res = fetch(url, {
+      method: "GET",
+      credentials: "include",
+    });
+  }
+
   return (
     <div class="min-h-screen flex items-center justify-center ">
       <form
@@ -100,6 +109,7 @@ export default function SignUp(props: Props) {
           Sign Up
         </button>
       </form>
+      <button onClick={cookie_backend}>cookie on backend</button>
     </div>
   );
 }

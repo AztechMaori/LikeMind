@@ -30,8 +30,9 @@ pub struct RefreshToken {
 }
 
 fn encode_refresh_token() -> Result<String, Error>{
-let secret = "2upNVKJdnT0N2rSTF338ZcaiYsxxtEzmsHl4+RQwpqI="; 
-let expiration_date = SystemTime::now().checked_add(std::time::Duration::from_secs(172800)).expect("overflow").duration_since(UNIX_EPOCH).expect("time has been incorrectly set").as_secs() as usize; 
+// let secret = "2upNVKJdnT0N2rSTF338ZcaiYsxxtEzmsHl4+RQwpqI="; 
+let secret = std::env::var("REFRESH_TOKEN").expect("REFRESH TOKEN SECRET COULDN'T BE LOADED FROM ENV");
+let expiration_date = (chrono::Utc::now() + chrono::Duration::seconds(172800)).timestamp() as usize;
 let body = RefreshToken{exp: expiration_date};  
 let header = Header::new(jsonwebtoken::Algorithm::HS256);  
 
@@ -40,16 +41,11 @@ return refresh_token;
 }
 
 fn encode_access_token(id:Uuid) -> Result<String, Error> {
-  let secret = "Jtso1AzmdRSglvM0OXXxQpcQUnM+k9qcq6dMnCL0mkY=";
+  // let secret = "Jtso1AzmdRSglvM0OXXxQpcQUnM+k9qcq6dMnCL0mkY=";
+  let secret = std::env::var("ACCESS_TOKEN").expect("ACCESS TOKEN SECRET COULDN'T BE LOADED FROM ENV");
+  let expiration_date = (chrono::Utc::now() + chrono::Duration::seconds(60)).timestamp() as usize;
 
-  let expiration_date = SystemTime::now()
-  .checked_add(std::time::Duration::from_secs(20))
-  .expect("SystemTime overflow")
-  .duration_since(UNIX_EPOCH)
-  .expect("Time went backwards")
-  .as_secs() as usize;
-
-  let body = AccessToken { id: id, exp: expiration_date }; 
+  let body = AccessToken { id: id, exp: (expiration_date) }; 
   let header = Header::new(jsonwebtoken::Algorithm::HS256); 
 
   let jwt = encode(&header, &body, &EncodingKey::from_secret(secret.as_ref())); 
