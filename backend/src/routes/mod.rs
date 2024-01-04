@@ -17,12 +17,7 @@ use sign_up::SignUp;
 // mod db_get;
 // use db_get::get_user;
 
-mod test;
-use test::trial; 
 
-
-mod set_cooke;
-use set_cooke::setcookie; 
 
 mod validation;
 use validation::time; 
@@ -30,10 +25,6 @@ use validation::time;
 mod authguard;
 use authguard::auth_guard;
 
-// mod yes;
-// use yes::yessir;
-
-// Access to fetch at 'http://localhost:3000/set' from origin 'http://localhost:4321' has been blocked by CORS policy: The 'Access-Control-Allow-Origin' header has a value 'http://localhost:4231' that is not equal to the supplied origin. Have the server send the header with a valid value, or, if an opaque response serves your needs, set the request's mode to 'no-cors' to fetch the resource with CORS disabled.
 
 
 pub fn create_routes(database:DatabaseConnection) -> Router {
@@ -48,11 +39,8 @@ pub fn create_routes(database:DatabaseConnection) -> Router {
     
 
     return Router::new()
-    .route("/test", get(trial))
     .route_layer(middleware::from_fn(auth_guard))
-    // .route("/yes", get(yessir))
     .route("/route", post(SignUp)) 
-    .route("/set", get(setcookie))
     .route("/time", get(time))
     .layer(Extension(database))
     .layer(cors)

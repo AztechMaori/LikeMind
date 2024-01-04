@@ -1,6 +1,7 @@
 
 mod db;
 mod routes;
+mod utils;
 use routes::create_routes;
 use sea_orm::{Database, DatabaseConnection, DbErr};
 
