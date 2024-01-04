@@ -47,6 +47,19 @@ export default function SignUp(props: Props) {
     });
   }
 
+  async function trial() {
+    const url = "http://localhost:3000/check";
+    try {
+      const res = fetch(url, {
+        method: "GET",
+        credentials: "include",
+      });
+      console.log(`succesfull operation ${res}`);
+    } catch (err) {
+      console.log(`there was an error, ${err}`);
+    }
+  }
+
   return (
     <div class="min-h-screen flex items-center justify-center ">
       <form
@@ -109,7 +122,8 @@ export default function SignUp(props: Props) {
           Sign Up
         </button>
       </form>
-      <button onClick={cookie_backend}>cookie on backend</button>
+      <button onClick={cookie_backend}>check if cookie exists</button>
+      <button onClick={trial}>check if middleware works</button>
     </div>
   );
 }

@@ -25,6 +25,8 @@ use validation::time;
 mod authguard;
 use authguard::auth_guard;
 
+mod check;
+use check::check;
 
 
 pub fn create_routes(database:DatabaseConnection) -> Router {
@@ -39,6 +41,7 @@ pub fn create_routes(database:DatabaseConnection) -> Router {
     
 
     return Router::new()
+    .route("/check", get(check))
     .route_layer(middleware::from_fn(auth_guard))
     .route("/route", post(SignUp)) 
     .route("/time", get(time))

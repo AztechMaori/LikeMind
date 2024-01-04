@@ -62,7 +62,7 @@ fn validate_query(query:Result<Option<Model>,DbErr>)-> Result<String, StatusCode
     
 
 }
-pub async fn auth_guard(Extension(database): Extension<DatabaseConnection> ,jar: CookieJar, mut request:Request<Body>, next: Next)->Result<Response, StatusCode>{
+pub async fn auth_guard(Extension(database): Extension<DatabaseConnection>,jar: CookieJar, mut request:Request<Body>, next: Next)->Result<Response, StatusCode>{
 let token = jar.get("auth").map(|token| token.value().to_owned());
 
 
@@ -85,7 +85,7 @@ match token {
                 }
                 // if access token is expired query db for refresh token
                 false => {
-                    let query = users::Entity::find_by_id(user_data.claims.id).one(&database).await;
+                    let query = users::Entity::find_by_id(user_data.claims.id).one(&database).await; // maybe use a manual SQL query to improve efficiency
                     let refresh_token = validate_query(query); // check if refresh token exists 
                     match refresh_token {
                         Ok(r_token) => {
@@ -98,7 +98,7 @@ match token {
                                
                             }
                             Err(error) => {
-                                println!("there was an error parsing your refresh token: {}", error);
+                                println!("there was an error parsing your refresh token,: {}", error);
                                 Err(StatusCode::UNAUTHORIZED)
                             }
                           }
@@ -117,13 +117,13 @@ match token {
               
             }
             Err(error) => {
-                println!("there was an error parsing your auth token: {}", error);
+                println!("there was an error decoding your auth token: {}", error);
                 Err(StatusCode::INTERNAL_SERVER_ERROR)
             }
         }
     }
     None => {
-        println!("no auth token found, login required");
+        println!("no auth token found, login required"); // redirect to login page 
         Err(StatusCode::UNAUTHORIZED)
     }
 }
