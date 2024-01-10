@@ -5,4 +5,4 @@ mod returns;
 pub use returns::returns;
 
 mod password;
-use password::validate_password;
+pub use password::validate_password;

@@ -23,8 +23,8 @@ use authguard::auth_guard;
 mod check;
 use check::check;
 
-mod x;
-use x::Gen;
+mod login;
+use login::login;
 
 mod test;
 use test::sql_test;
@@ -45,7 +45,7 @@ pub fn create_routes(database:Pool<Postgres>) -> Router {
     .route("/check", get(check))
     .route_layer(middleware::from_fn(auth_guard))
     .route("/test", get(sql_test))
-    .route("/login", post(Gen))
+    .route("/login", post(login))
     .route("/route", post(SignUp)) 
    
     

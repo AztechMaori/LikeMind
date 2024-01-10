@@ -5,8 +5,9 @@ use sqlx::{Postgres, postgres::PgQueryResult, Pool, FromRow};
 use uuid::Uuid;
 
 #[derive(Deserialize)]
-pub struct jell{
-  data:String, 
+pub struct UserData{
+  email: String, 
+  password: String,
 }
 
 #[derive(FromRow)]
@@ -42,14 +43,14 @@ pub async fn update_refresh_token( db: &Pool<Postgres>, id:Uuid, r_token: String
   }
 
 
-pub async fn sql_test(Extension(database): Extension<Pool<Postgres>>,jar:CookieJar, Json(data):Json<jell>){
+pub async fn sql_test(Extension(database): Extension<Pool<Postgres>>,jar:CookieJar, Json(u_data):Json<UserData>){
 
-let details = get_details(&database, "ash@gmail.com".to_string()).await.unwrap();
-println!("the first query worked. this porves the login tiself it the problem{}", details.id);
+let details = get_details(&database, u_data.email ).await.unwrap();
+println!("the first query worked: {}", details.id);
 
-let x = trial_2(&database, details.id).await.unwrap();
+let x = update_refresh_token(&database, details.id, "mandem".to_string()).await.unwrap();
 
-println!("the secnd query worked: {}", x);
+println!("the secnd query worked: {:?}", x);
 }
 
 
