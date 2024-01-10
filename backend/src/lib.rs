@@ -3,9 +3,10 @@ mod db;
 mod routes;
 mod utils;
 use routes::create_routes;
-use sea_orm::{Database, DatabaseConnection, DbErr};
 
-async fn validate_connection(db:Result<DatabaseConnection,DbErr>){
+use sqlx::{Connection, Pool, Postgres, Error, database, postgres::PgPoolOptions};
+
+async fn validate_connection(db:Result<Pool<Postgres>, Error>){
     match db {
         Ok(database) => {
             println!("Connection to database succesful!");
@@ -22,8 +23,8 @@ async fn validate_connection(db:Result<DatabaseConnection,DbErr>){
 
 
 pub async fn run(db_uri: String){
-// connect SEAORM and DB 
-let database: Result<DatabaseConnection,DbErr> = Database::connect(db_uri).await;
+// Connection to postgres through SQLX
+let database = sqlx::postgres::PgPool::connect(&db_uri).await;
 
 validate_connection(database).await;
 

@@ -4,6 +4,7 @@ use jsonwebtoken::{Header, encode,decode,  EncodingKey, TokenData, Validation, D
 use axum::{Json, Extension, http::{StatusCode, header::{SET_COOKIE, COOKIE}, status}, response::{Response, Redirect, IntoResponse}, body::Body};
 use axum_extra::extract::{CookieJar, cookie::Cookie};
 use serde::{Serialize,Deserialize};
+use sqlx::{Pool, Postgres, postgres::PgQueryResult};
 use crate::db::users;
 use sea_orm::{ActiveValue::Set, DatabaseConnection, ActiveModelTrait}; 
 use uuid::Uuid;
@@ -29,12 +30,37 @@ pub struct RefreshToken {
   exp: usize,
 }
 
+struct User{
+  email:String, 
+  username: String, 
+  hashed_password:String, 
+  salt:String, 
+  id:Uuid, 
+  refresh_token:String,
+}
+
+
+pub async fn create_user(user: User, db:&Pool<Postgres>) -> Result<PgQueryResult, sqlx::Error>{
+let query = "INSERT INTO users (email, username, hashed_password, salt, id, refresh_token) VALUES ($1, $2, $3, $4, $5, $6)";
+
+ let query = sqlx::query(query)
+            .bind(user.email)
+            .bind(user.username)
+            .bind(user.hashed_password)
+            .bind(user.salt)
+            .bind(user.id)
+            .bind(user.refresh_token)
+            .execute(db)
+            .await;
+     
+     return query;
+
+   
+}
 
 
 
-
-
-pub async fn SignUp( Extension(database):Extension<DatabaseConnection>, jar:CookieJar, Json(user_data): Json<UserData>) -> Result<CookieJar, StatusCode>{ 
+pub async fn SignUp( Extension(database):Extension<Pool<Postgres>>, jar:CookieJar, Json(user_data): Json<UserData>) -> Result<CookieJar, StatusCode>{ 
   
   let id = Uuid::new_v4();
 
@@ -57,30 +83,32 @@ pub async fn SignUp( Extension(database):Extension<DatabaseConnection>, jar:Cook
        let argon = Argon2::default(); 
        let hashed_pw = argon.hash_password(user_data.password.as_bytes(), &salt).expect("password hashing failed").to_string();  
     
-        
-        let new_user = users::ActiveModel{
-            email: Set(user_data.email),
-            username: Set(user_data.username), 
-            hashed_password: Set(hashed_pw), 
-            salt: Set(salt.to_string()), 
-            id: Set(id.clone()),
-            refresh_token: Set(Some(r_token)),
-            ..Default::default()
-            }; 
-        
-         let user_created = new_user.insert(&database).await; 
+       let user = User {
+        email: user_data.email, 
+        username: user_data.username, 
+        hashed_password: hashed_pw, 
+        salt: salt.to_string(), 
+        id: id,
+        refresh_token: r_token
+       };
 
-         match user_created {
-             Ok(_) => {
-              println!("user has been succesfully created"); 
-              Ok(jar.add(auth_cookie))
-            
-             }
-             Err(error) => {
-              println!("there was an error, creating the user: {}", error); 
-              Err(StatusCode::INTERNAL_SERVER_ERROR)
-             }
-         }
+       let success = create_user(user, &database).await;
+
+
+       match success {
+           Ok(data) => {
+            println!("the user has been succesfully created: {:?}", data);
+            Ok(jar.add(auth_cookie))
+           }
+           Err(error) => {
+            println!("there was an error creating the user: {}", error); 
+            Err(StatusCode::INTERNAL_SERVER_ERROR)
+           }
+       }
+
+
+
+
         }
         Err(error) => {
           println!("error creating refresh token: {}", error);

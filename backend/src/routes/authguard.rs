@@ -7,11 +7,13 @@ use chrono::Utc;
 
 
 use sea_orm::{DatabaseConnection, EntityTrait, DbErr};
+use sqlx::{Pool, Postgres, prelude::FromRow};
 use uuid::Uuid;
 
 
 use crate::db::users::{self, Model};
 use crate::utils::{decode_access_token,decode_refresh_token};
+
 
 #[derive(Clone)]
 pub struct Passed {
@@ -29,40 +31,17 @@ fn time_validation(expiry: usize) -> bool {
    }
 }
 
-fn validate_query(query:Result<Option<Model>,DbErr>)-> Result<String, StatusCode>{
-    match query {
-        Ok(data) => {
-          match data {
-            Some(user) => {
-                let refresh_token = user.refresh_token;
-                match refresh_token {
-                    Some(token) => {
-                        Ok(token)
-                    }
-                    None => {
-                        println!("you have no refresh token");
-                        Err(StatusCode::UNAUTHORIZED)
-                        // redirect back to login for new refresh token
-
-                    }
-                }
-            }
-            None => {
-                println!("User Model not found, create an account please!");
-                Err(StatusCode::UNAUTHORIZED)
-                // redirect back to signup to create an account;
-            }
-          }
-        }
-        Err(error) => {
-            println!("there was an error retrieving user model from the database: {}", error);
-            Err(StatusCode::INTERNAL_SERVER_ERROR)
-        }
-    } 
-    
-
+pub async fn get_refresh_token(db:&Pool<Postgres>, id:Uuid )-> Result<String,sqlx::Error>{
+    let query = "SELECT refresh_token FROM users WHERE id = $1";
+    // let row = sqlx::query_as::<_,RToken>(query).bind(id).fetch_one(&db).await;
+    let row: Result<String, sqlx::Error> = sqlx::query_scalar(query).bind(id).fetch_one(db).await;
+    return row;
 }
-pub async fn auth_guard(Extension(database): Extension<DatabaseConnection>,jar: CookieJar, mut request:Request<Body>, next: Next)->Result<Response, StatusCode>{
+
+
+
+
+pub async fn auth_guard(Extension(database): Extension<Pool<Postgres>>,jar: CookieJar, mut request:Request<Body>, next: Next)->Result<Response, StatusCode>{
 let token = jar.get("auth").map(|token| token.value().to_owned());
 
 
@@ -85,9 +64,8 @@ match token {
                 }
                 // if access token is expired query db for refresh token
                 false => {
-                    let query = users::Entity::find_by_id(user_data.claims.id).one(&database).await; // maybe use a manual SQL query to improve efficiency
-                    let refresh_token = validate_query(query); // check if refresh token exists 
-                    match refresh_token {
+                   let data = get_refresh_token(&database, user_data.claims.id).await;
+                    match data {
                         Ok(r_token) => {
                           let decoded_refresh = decode_refresh_token(r_token); // decode refresh token to check whether it is expired (possibly make this a manual check instead of decoding the entire token)
                           match decoded_refresh {
@@ -104,8 +82,10 @@ match token {
                           }
                         }
                         Err(error) => {
-                        Err(error)
+                            println!("there was an error retrieiving your refresh token: {}, please login again", error); 
+                            Err(StatusCode::UNAUTHORIZED)
                         }
+        
                     }
 
                     

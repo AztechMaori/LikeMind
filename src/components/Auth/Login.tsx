@@ -8,7 +8,35 @@ export default function Login(props: Props) {
   const [email, setEmail] = createSignal("");
   const [password, setPassword] = createSignal("");
 
-  function handleSubmit() {}
+  async function handleSubmit() {
+    event?.preventDefault;
+
+    const user_data = {
+      email: email(),
+      password: password(),
+    };
+    const url = "http://localhost:3000/login";
+    try {
+      const res = fetch(url, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(user_data),
+      });
+      console.log(`the response was: ${res}`);
+      setEmail("");
+      setPassword("");
+    } catch (err) {
+      console.log(`there was an error: ${err}`);
+    }
+  }
+  async function check() {
+    const url = "http://localhost:3000/test";
+
+    const res = fetch(url);
+  }
 
   return (
     <div class="min-h-screen flex items items-center justify-center ">
@@ -55,6 +83,7 @@ export default function Login(props: Props) {
         >
           Login
         </button>
+        <button onClick={check}>check</button>
       </form>
     </div>
   );

@@ -241,6 +241,7 @@ dependencies = [
  "rand_core",
  "sea-orm",
  "serde",
+ "sqlx",
  "tokio",
  "tower-http",
  "uuid",
