@@ -11,7 +11,7 @@ use sqlx::{Pool, Postgres, prelude::FromRow};
 use uuid::Uuid;
 
 
-use crate::db::users::{self, Model};
+
 use crate::utils::{decode_access_token,decode_refresh_token};
 
 

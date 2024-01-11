@@ -9,7 +9,7 @@ export default function Login(props: Props) {
   const [password, setPassword] = createSignal("");
 
   async function handleSubmit() {
-    event?.preventDefault;
+    event?.preventDefault();
 
     const user_data = {
       email: email(),
@@ -17,7 +17,7 @@ export default function Login(props: Props) {
     };
     const url = "http://localhost:3000/login";
     try {
-      const res = fetch(url, {
+      const res = await fetch(url, {
         method: "POST",
         credentials: "include",
         headers: {
@@ -83,7 +83,6 @@ export default function Login(props: Props) {
         >
           Login
         </button>
-        <button onClick={check}>check</button>
       </form>
     </div>
   );

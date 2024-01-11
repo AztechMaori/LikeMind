@@ -5,7 +5,7 @@ use axum::{Json, Extension, http::{StatusCode, header::{SET_COOKIE, COOKIE}, sta
 use axum_extra::extract::{CookieJar, cookie::Cookie};
 use serde::{Serialize,Deserialize};
 use sqlx::{Pool, Postgres, postgres::PgQueryResult};
-use crate::db::users;
+
 use sea_orm::{ActiveValue::Set, DatabaseConnection, ActiveModelTrait}; 
 use uuid::Uuid;
 use argon2::{password_hash::{PasswordHasher, SaltString, rand_core::OsRng},Argon2};
@@ -57,6 +57,8 @@ let query = "INSERT INTO users (email, username, hashed_password, salt, id, refr
 
    
 }
+
+//REFACTOR CODE SO THAT CREATING THE USER COMES BEFORE CREATING THE ACCESS OR REFRESH TOKENS
 
 
 

@@ -5,7 +5,7 @@ use serde::{Deserialize, de};
 use sqlx::{PgPool, postgres::PgQueryResult, prelude::FromRow};
 use uuid::Uuid;
 
-use crate::utils::{validate_password, encode_access_token, encode_refresh_token};
+use crate::utils::{validate_password, encode_access_token, encode_refresh_token, decode_access_token, time_validation};
 
 
 #[derive(Deserialize)]
@@ -22,11 +22,34 @@ pub struct Details {
     salt: String, 
 }
 
+pub fn check_valid_session(og_token: String)-> bool {
+     let token_data = decode_access_token(og_token);
+     
+     match token_data {
+        Ok(t) => {
+         let valid = time_validation(t.claims.exp);
+         if valid == true {
+            return true;
+         }
+         else {
+             return  false;
+         }
+
+        }
+        Err(error) => {
+            println!("there was an error parsing the original token");
+            return false
+        }
+     }
+}
+
+
 pub async fn get_details_from_email(db: &PgPool, email: String) -> Result<Details, sqlx::Error>{
     let query = "SELECT hashed_password, id, salt FROM users WHERE email = $1";
     let details: Result<Details, sqlx::Error> = sqlx::query_as(query).bind(email).fetch_one(db).await;
     return details 
 }
+
 
 pub async fn update_refresh_token(db: &PgPool, id: Uuid, r_token: String)-> Result<PgQueryResult, sqlx::Error>{
    let query = "UPDATE users SET refresh_token = $1 WHERE id = $2";
@@ -35,7 +58,19 @@ pub async fn update_refresh_token(db: &PgPool, id: Uuid, r_token: String)-> Resu
 }
 
 pub async fn login(Extension(db):Extension<PgPool>, jar:CookieJar, Json(u_data):Json<UserData>)-> Result<CookieJar, StatusCode>{
-let details = get_details_from_email(&db, u_data.email).await;
+    let og_token = jar.get("auth").map(|token| token.value().to_owned());
+
+    match og_token {
+        Some(token) => {
+            let check = check_valid_session(token);
+
+    match check{
+        true => {
+            println!("you are already logged in");
+            Err(StatusCode::SERVICE_UNAVAILABLE)
+        }
+        false => {
+            let details = get_details_from_email(&db, u_data.email).await;
 
 match details {
     Ok(details) => {
@@ -66,6 +101,19 @@ match details {
         Err(StatusCode::INTERNAL_SERVER_ERROR)
     }
 }
+        }
+    }
+        }
+        None => {
+            println!("Please create an account before logging in!");
+            Err(StatusCode::UNAUTHORIZED)
+            
+        }
+    }
+
+
+    
+
 
 
 }

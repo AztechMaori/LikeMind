@@ -1,3 +1,4 @@
+use chrono::Utc;
 use jsonwebtoken::{TokenData, Validation, decode, DecodingKey, errors::Error, Header, encode, EncodingKey};
 use uuid::Uuid;
 use serde::{Serialize,Deserialize};
@@ -16,6 +17,16 @@ pub struct AccessToken{
 
 pub struct RefreshToken {
   pub exp: usize,
+}
+//manually validate whether the access token is still valid in the current time
+
+pub fn time_validation(expiry: usize) -> bool {
+  let current_time = Utc::now().timestamp();
+ if current_time >= expiry.try_into().expect("conversion failed") {
+  return false
+ } else {
+     return true
+ }
 }
 
 //decoding tokens

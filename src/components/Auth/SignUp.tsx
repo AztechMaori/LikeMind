@@ -18,7 +18,7 @@ export default function SignUp(props: Props) {
       password: password(),
     };
 
-    const url = "http://localhost:3000/route";
+    const url = "http://localhost:3000/signup";
 
     try {
       const response = await fetch(url, {
