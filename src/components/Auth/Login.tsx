@@ -25,17 +25,12 @@ export default function Login(props: Props) {
         },
         body: JSON.stringify(user_data),
       });
-      console.log(`the response was: ${res}`);
+      console.log(`the response was: ${res.status}`);
       setEmail("");
       setPassword("");
     } catch (err) {
       console.log(`there was an error: ${err}`);
     }
-  }
-  async function check() {
-    const url = "http://localhost:3000/test";
-
-    const res = fetch(url);
   }
 
   return (

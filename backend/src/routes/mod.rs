@@ -2,14 +2,12 @@
 
 use axum::
 {routing::{get, post}, Router, http::{Method, header::{AUTHORIZATION, COOKIE, ACCESS_CONTROL_ALLOW_CREDENTIALS, CONTENT_TYPE}, HeaderValue}, Extension, middleware};
-
-use sea_orm::DatabaseConnection;
 use sqlx::{Pool, Postgres};
-use tower_http::cors::{CorsLayer, Any, AllowCredentials, AllowOrigin, any};
+use tower_http::cors::CorsLayer;
 
 //hello world 
 mod sign_up;
-use sign_up::SignUp; 
+use sign_up::sign_up; 
 
 //JWT
 
@@ -26,8 +24,8 @@ use check::check;
 mod login;
 use login::login;
 
-mod test;
-use test::sql_test;
+
+
 
 
 pub fn create_routes(database:Pool<Postgres>) -> Router {
@@ -44,9 +42,8 @@ pub fn create_routes(database:Pool<Postgres>) -> Router {
     return Router::new()
     .route("/check", get(check))
     .route_layer(middleware::from_fn(auth_guard))
-    .route("/test", get(sql_test))
     .route("/login", post(login))
-    .route("/signup", post(SignUp)) 
+    .route("/signup", post(sign_up)) 
    
     
     .layer(Extension(database))

@@ -1,7 +1,7 @@
 use axum::{Extension, Json, http::StatusCode};
 use axum_extra::extract::{CookieJar, cookie::Cookie};
 
-use serde::{Deserialize, de};
+use serde::Deserialize;
 use sqlx::{PgPool, postgres::PgQueryResult, prelude::FromRow};
 use uuid::Uuid;
 
@@ -37,7 +37,7 @@ pub fn check_valid_session(og_token: String)-> bool {
 
         }
         Err(error) => {
-            println!("there was an error parsing the original token");
+            println!("there was an error parsing the original token: {}", error);
             return false
         }
      }
@@ -76,8 +76,9 @@ match details {
     Ok(details) => {
         let valid = validate_password(u_data.password, details.hashed_password, details.salt);
         if valid == true {
-         let a_token = encode_access_token(details.id, false).expect("failure to create access token");
-         let r_token = encode_refresh_token().expect("failure to create refresh token");
+         let f_key = Uuid::new_v4();
+         let a_token = encode_access_token(details.id, false, f_key ).expect("failure to create access token");
+         let r_token = encode_refresh_token(f_key).expect("failure to create refresh token");
          let success = update_refresh_token(&db, details.id, r_token).await;
          match success {
             Ok(s) => {

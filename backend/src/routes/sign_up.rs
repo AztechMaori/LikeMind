@@ -1,12 +1,12 @@
-use std::{time::{SystemTime, UNIX_EPOCH}};
 
-use jsonwebtoken::{Header, encode,decode,  EncodingKey, TokenData, Validation, DecodingKey, errors::Error};
-use axum::{Json, Extension, http::{StatusCode, header::{SET_COOKIE, COOKIE}, status}, response::{Response, Redirect, IntoResponse}, body::Body};
+
+
+use axum::{Json, Extension, http::StatusCode};
 use axum_extra::extract::{CookieJar, cookie::Cookie};
 use serde::{Serialize,Deserialize};
 use sqlx::{Pool, Postgres, postgres::PgQueryResult};
 
-use sea_orm::{ActiveValue::Set, DatabaseConnection, ActiveModelTrait}; 
+
 use uuid::Uuid;
 use argon2::{password_hash::{PasswordHasher, SaltString, rand_core::OsRng},Argon2};
 
@@ -30,7 +30,7 @@ pub struct RefreshToken {
   exp: usize,
 }
 
-struct User{
+pub struct User{
   email:String, 
   username: String, 
   hashed_password:String, 
@@ -62,11 +62,12 @@ let query = "INSERT INTO users (email, username, hashed_password, salt, id, refr
 
 
 
-pub async fn SignUp( Extension(database):Extension<Pool<Postgres>>, jar:CookieJar, Json(user_data): Json<UserData>) -> Result<CookieJar, StatusCode>{ 
+pub async fn sign_up( Extension(database):Extension<Pool<Postgres>>, jar:CookieJar, Json(user_data): Json<UserData>) -> Result<CookieJar, StatusCode>{ 
   
-  let id = Uuid::new_v4();
+  let user_id = Uuid::new_v4();
+  let token_f_key = Uuid::new_v4();
 
-  let access_token = encode_access_token(id.clone(), false);
+  let access_token = encode_access_token(user_id.clone(), false, token_f_key);
 
   match access_token {
     Ok(a_token) => {
@@ -75,7 +76,7 @@ pub async fn SignUp( Extension(database):Extension<Pool<Postgres>>, jar:CookieJa
      
 
 
-      let refresh_token = encode_refresh_token();
+      let refresh_token = encode_refresh_token(token_f_key);
 
       match refresh_token {
         Ok(r_token) => {
@@ -90,7 +91,7 @@ pub async fn SignUp( Extension(database):Extension<Pool<Postgres>>, jar:CookieJa
         username: user_data.username, 
         hashed_password: hashed_pw, 
         salt: salt.to_string(), 
-        id: id,
+        id: user_id,
         refresh_token: r_token
        };
 

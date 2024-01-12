@@ -1,11 +1,7 @@
-import Headbar from "../HeaderFolder/Headbar"
-
-
-export default function Trending(){
-    return(
-        <>
-        <Headbar/>
-        <p>here is the trending</p>
-        </>
-    )
+export default function Trending() {
+  return (
+    <>
+      <p>here is the trending</p>
+    </>
+  );
 }

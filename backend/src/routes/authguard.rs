@@ -6,8 +6,7 @@ use axum_extra::extract::CookieJar;
 use chrono::Utc;
 
 
-use sea_orm::{DatabaseConnection, EntityTrait, DbErr};
-use sqlx::{Pool, Postgres, prelude::FromRow};
+use sqlx::{Pool, Postgres};
 use uuid::Uuid;
 
 
@@ -48,31 +47,38 @@ let token = jar.get("auth").map(|token| token.value().to_owned());
 //check for access token existence
 match token {
     Some(a_jwt) => {
-        let data = decode_access_token(a_jwt.clone()); 
+        let a_token_data = decode_access_token(a_jwt.clone()); 
         
         // check if access token is expired
-        match data {
-            Ok(user_data) => {
+        match a_token_data {
+            Ok(a_token_data) => {
                
-               let validity: bool = time_validation(user_data.claims.exp);
+               let validity: bool = time_validation(a_token_data.claims.exp);
 
                match validity {
                 true => {
-                    let passed: Passed = Passed { userid: user_data.claims.id, send:false };
+                    let passed: Passed = Passed { userid: a_token_data.claims.id, send:false };
                     request.extensions_mut().insert(passed);
                     Ok(next.run(request).await)
                 }
                 // if access token is expired query db for refresh token
                 false => {
-                   let data = get_refresh_token(&database, user_data.claims.id).await;
-                    match data {
+                   let r_token = get_refresh_token(&database, a_token_data.claims.id).await;
+                    match r_token {
                         Ok(r_token) => {
                           let decoded_refresh = decode_refresh_token(r_token); // decode refresh token to check whether it is expired (possibly make this a manual check instead of decoding the entire token)
                           match decoded_refresh {
-                            Ok(_) => {
-                               let passed: Passed = Passed { userid: user_data.claims.id, send: true };
+                            Ok(r_token_data) => {
+                               if a_token_data.claims.f_key == r_token_data.claims.f_key {
+                                let passed: Passed = Passed { userid: a_token_data.claims.id, send: true };
                                request.extensions_mut().insert(passed);
                                Ok(next.run(request).await)
+                               }
+                               else {
+                                    println!("the foregin key of the refresh token does not match the foreign key of the access token.");
+                                    Err(StatusCode::UNAUTHORIZED)
+                               }
+                               
                                
                             }
                             Err(error) => {
