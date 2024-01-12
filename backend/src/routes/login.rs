@@ -81,8 +81,8 @@ match details {
          let r_token = encode_refresh_token(f_key).expect("failure to create refresh token");
          let success = update_refresh_token(&db, details.id, r_token).await;
          match success {
-            Ok(s) => {
-                println!("refresh token succesfully renewed!: {:?}",s);
+            Ok(_) => {
+                println!("refresh token succesfully renewed!");
                 let auth_cookie = Cookie::build(("auth", a_token)).http_only(false);
                 Ok(jar.add(auth_cookie))
             }
@@ -107,7 +107,7 @@ match details {
         }
         None => {
             println!("Please create an account before logging in!");
-            Err(StatusCode::UNAUTHORIZED)
+            Err(StatusCode::INTERNAL_SERVER_ERROR)
             
         }
     }

@@ -17,6 +17,7 @@ use crate::utils::{decode_access_token,decode_refresh_token};
 #[derive(Clone)]
 pub struct Passed {
     pub userid: Uuid, 
+    pub f_key:Option<Uuid>,
     pub send:bool,
 }
   
@@ -44,12 +45,11 @@ pub async fn auth_guard(Extension(database): Extension<Pool<Postgres>>,jar: Cook
 let token = jar.get("auth").map(|token| token.value().to_owned());
 
 
-//check for access token existence
+
 match token {
     Some(a_jwt) => {
         let a_token_data = decode_access_token(a_jwt.clone()); 
         
-        // check if access token is expired
         match a_token_data {
             Ok(a_token_data) => {
                
@@ -57,20 +57,20 @@ match token {
 
                match validity {
                 true => {
-                    let passed: Passed = Passed { userid: a_token_data.claims.id, send:false };
+                    let passed: Passed = Passed { userid: a_token_data.claims.id, send:false,f_key:None  };
                     request.extensions_mut().insert(passed);
                     Ok(next.run(request).await)
                 }
-                // if access token is expired query db for refresh token
+         
                 false => {
                    let r_token = get_refresh_token(&database, a_token_data.claims.id).await;
                     match r_token {
                         Ok(r_token) => {
-                          let decoded_refresh = decode_refresh_token(r_token); // decode refresh token to check whether it is expired (possibly make this a manual check instead of decoding the entire token)
+                          let decoded_refresh = decode_refresh_token(r_token);
                           match decoded_refresh {
                             Ok(r_token_data) => {
                                if a_token_data.claims.f_key == r_token_data.claims.f_key {
-                                let passed: Passed = Passed { userid: a_token_data.claims.id, send: true };
+                                let passed: Passed = Passed { userid: a_token_data.claims.id, send: true, f_key: Some(r_token_data.claims.f_key)};
                                request.extensions_mut().insert(passed);
                                Ok(next.run(request).await)
                                }

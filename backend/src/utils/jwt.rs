@@ -66,7 +66,7 @@ pub fn encode_access_token(id:Uuid, regen:bool, f_key: Uuid) -> Result<String, E
   pub fn encode_refresh_token(f_key: Uuid) -> Result<String, Error>{
     // let secret = "2upNVKJdnT0N2rSTF338ZcaiYsxxtEzmsHl4+RQwpqI="; 
     let secret = std::env::var("REFRESH_TOKEN").expect("REFRESH TOKEN SECRET COULDN'T BE LOADED FROM ENV");
-    let expiration_date = (chrono::Utc::now() + chrono::Duration::seconds(100)).timestamp() as usize;
+    let expiration_date = (chrono::Utc::now() + chrono::Duration::seconds(40)).timestamp() as usize;
     let body = RefreshToken{exp: expiration_date, f_key: f_key };  
     let header = Header::new(jsonwebtoken::Algorithm::HS256);  
     

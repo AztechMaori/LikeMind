@@ -1,5 +1,4 @@
-import { createSignal, type Setter } from "solid-js";
-
+import { createSignal, onCleanup, type Setter } from "solid-js";
 interface Props {
   setModal: Setter<boolean>;
 }
@@ -8,6 +7,21 @@ export default function SignUp(props: Props) {
   const [username, setUsername] = createSignal("");
   const [email, setEmail] = createSignal("");
   const [password, setPassword] = createSignal("");
+
+  const [notif, setNotif] = createSignal(false);
+  const [message, setMessage] = createSignal("");
+
+  function Notification() {
+    setNotif(true);
+
+    const timeout = setTimeout(() => {
+      setNotif(false);
+    }, 1300);
+
+    onCleanup(() => {
+      clearTimeout(timeout);
+    });
+  }
 
   async function handleSubmit() {
     event?.preventDefault();
@@ -29,7 +43,16 @@ export default function SignUp(props: Props) {
         },
         body: JSON.stringify(user_data),
       });
-      console.log(response);
+      console.log(response.status);
+
+      if (response.status == 401) {
+        setMessage("UNAUTHORIZED");
+        Notification();
+      } else if (response.status == 500) {
+        setMessage("INTERNAL SERVER ERROR");
+        Notification();
+      }
+
       setUsername("");
       setPassword("");
       setEmail("");
@@ -50,11 +73,11 @@ export default function SignUp(props: Props) {
   async function trial() {
     const url = "http://localhost:3000/check";
     try {
-      const res = fetch(url, {
+      const res = await fetch(url, {
         method: "GET",
         credentials: "include",
       });
-      console.log(`succesfull operation ${res}`);
+      console.log(`succesfull operation ${res.status}`);
     } catch (err) {
       console.log(`there was an error, ${err}`);
     }
@@ -62,6 +85,11 @@ export default function SignUp(props: Props) {
 
   return (
     <div class="min-h-screen flex items-center justify-center ">
+      {notif() && (
+        <div class="fixed top-0 left-0 w-full bg-yellow-300 p-4 text-center">
+          <p>Unauthorized</p>
+        </div>
+      )}
       <form
         onSubmit={handleSubmit}
         class="bg-white p-8 shadow-md rounded-md w-96"
