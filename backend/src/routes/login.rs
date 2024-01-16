@@ -107,7 +107,7 @@ match details {
         }
         None => {
             println!("Please create an account before logging in!");
-            Err(StatusCode::INTERNAL_SERVER_ERROR)
+            Err(StatusCode::UNAUTHORIZED)
             
         }
     }

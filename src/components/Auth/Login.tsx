@@ -1,5 +1,4 @@
 import { createSignal, onCleanup, type Setter } from "solid-js";
-import Notification from "../Notifications/authNotifs";
 
 interface Props {
   setModal: Setter<boolean>;
@@ -8,7 +7,6 @@ interface Props {
 export default function Login(props: Props) {
   const [email, setEmail] = createSignal("");
   const [password, setPassword] = createSignal("");
-
   const [notif, setNotif] = createSignal(false);
   const [message, setMessage] = createSignal("");
 
@@ -24,13 +22,14 @@ export default function Login(props: Props) {
     });
   }
 
-  async function handleSubmit() {
+  async function handleLogin() {
     event?.preventDefault();
 
     const user_data = {
       email: email(),
       password: password(),
     };
+
     const url = "http://localhost:3000/login";
     try {
       const res = await fetch(url, {
@@ -42,6 +41,8 @@ export default function Login(props: Props) {
         body: JSON.stringify(user_data),
       });
       console.log(`the response was: ${res.status}`);
+      setEmail("");
+      setPassword("");
       if (res.status == 401) {
         setMessage("UNAUTHORIZED");
         Notification();
@@ -49,8 +50,6 @@ export default function Login(props: Props) {
         setMessage("INTERNL SERVER ERROR");
         Notification();
       }
-      setEmail("");
-      setPassword("");
     } catch (err) {
       console.log(`there was an error: ${err}`);
     }
@@ -64,7 +63,7 @@ export default function Login(props: Props) {
         </div>
       )}
       <form
-        onSubmit={handleSubmit}
+        onSubmit={handleLogin}
         class="bg-white p-8 shadow-md rounded-md w-96"
       >
         <button onclick={() => props.setModal(false)} class=" mb-4">

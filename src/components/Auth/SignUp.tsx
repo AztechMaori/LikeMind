@@ -1,4 +1,5 @@
 import { createSignal, onCleanup, type Setter } from "solid-js";
+
 interface Props {
   setModal: Setter<boolean>;
 }
@@ -7,7 +8,6 @@ export default function SignUp(props: Props) {
   const [username, setUsername] = createSignal("");
   const [email, setEmail] = createSignal("");
   const [password, setPassword] = createSignal("");
-
   const [notif, setNotif] = createSignal(false);
   const [message, setMessage] = createSignal("");
 
@@ -23,7 +23,7 @@ export default function SignUp(props: Props) {
     });
   }
 
-  async function handleSubmit() {
+  async function handleSignIn() {
     event?.preventDefault();
 
     const user_data = {
@@ -43,6 +43,9 @@ export default function SignUp(props: Props) {
         },
         body: JSON.stringify(user_data),
       });
+      setUsername("");
+      setPassword("");
+      setEmail("");
       console.log(response.status);
 
       if (response.status == 401) {
@@ -52,10 +55,6 @@ export default function SignUp(props: Props) {
         setMessage("INTERNAL SERVER ERROR");
         Notification();
       }
-
-      setUsername("");
-      setPassword("");
-      setEmail("");
     } catch (err) {
       console.log(err);
     }
@@ -91,7 +90,7 @@ export default function SignUp(props: Props) {
         </div>
       )}
       <form
-        onSubmit={handleSubmit}
+        onSubmit={handleSignIn}
         class="bg-white p-8 shadow-md rounded-md w-96"
       >
         <button onClick={() => props.setModal(true)} class=" mb-4">

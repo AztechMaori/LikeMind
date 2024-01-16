@@ -1,15 +1,34 @@
 ---
 import Headbar from "../components/HeaderFolder/Headbar";
-import Profile from "../components/ProfileFolder/Profile";
-
+import Bio from "../components/ProfileFolder/Bio";
+import UserBounties from "../components/ProfileFolder/UserBounties"
+import SocialMedia from "../components/ProfileFolder/SocialMedia"
+import Profile from "../components/ProfileFolder/trial";
 ---
 
 <html>
     <head>
     </head>
-    <body>
-           <Headbar client:load/>
-            <Profile/>
+    <body class="grid grid-cols-3  gap-4 ">
+
+       <div class=" col-span-3 ">
+            <Headbar client:load />
+        </div>
+        
+      <div class="col-span-2">
+        <!-- <Bio client:load/> -->
+        <Profile/>
+      </div>
+      <div class="col-span-1 row-span-5">
+        <UserBounties/>
+      </div> 
+      <div class="col-span-2">
+        <SocialMedia/>
+      </div>
+    
+          
+     
+            
   
     </body>
 </html>
