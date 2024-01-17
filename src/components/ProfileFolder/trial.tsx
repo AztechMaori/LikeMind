@@ -13,7 +13,7 @@ export default function Profile() {
           />
         </div>
       </div>
-      <div class="col-span-1 row-span-2 ml-2  pl-7 lg:ml-2 xl:ml-0">
+      <div class="col-span-2 row-span-2 ml-2  pl-7 lg:ml-2 xl:ml-0">
         <h2 class="text-xl font-semibold text-gray-800">John Doe</h2>
         <p class="text-gray-500">Web Developer</p>
         <div class="mt-6">
@@ -28,7 +28,7 @@ export default function Profile() {
         </div>
         <div class="col-span-2 row-span-1">
           <div class=" absolute ">
-            <div class=" relative top-6 right-10">
+            <div class=" relative top-6 right-8 ">
               <a
                 href="#"
                 class="ml-0  px-4 py-2 rounded-full bg-blue-500 text-white transition duration-300 ease-in-out transform hover:bg-blue-600 hover:scale-105"
@@ -41,6 +41,7 @@ export default function Profile() {
               >
                 Message
               </a>
+              <div class="col-span-1"> socialmedia</div>
             </div>
           </div>
         </div>

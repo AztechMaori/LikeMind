@@ -1,3 +1,9 @@
 export default function SocialMedia() {
-  return <div class="flex justify-center">social media links</div>;
+  return (
+    <div class="flex flex-col gap-4 ">
+      <div>insta</div>
+      <div>twitter</div>
+      <div>snapchat</div>
+    </div>
+  );
 }

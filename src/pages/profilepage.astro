@@ -3,28 +3,26 @@ import Headbar from "../components/HeaderFolder/Headbar";
 import Bio from "../components/ProfileFolder/Bio";
 import UserBounties from "../components/ProfileFolder/UserBounties"
 import SocialMedia from "../components/ProfileFolder/SocialMedia"
-import Profile from "../components/ProfileFolder/trial";
+
 ---
 
 <html>
     <head>
     </head>
-    <body class="grid grid-cols-3  gap-4 ">
+    <body class="grid grid-cols-4  gap-4 ">
 
-       <div class=" col-span-3 ">
+       <div class=" col-span-4 ">
             <Headbar client:load />
         </div>
         
-      <div class="col-span-2">
-        <!-- <Bio client:load/> -->
-        <Profile/>
+      <div class="col-span-3 rounded-lg shadow-lg">
+        <Bio client:load/>
+   
       </div>
-      <div class="col-span-1 row-span-5">
+      <div class="col-span-1 row-span-5  rounded-lg shadow-md">
         <UserBounties/>
       </div> 
-      <div class="col-span-2">
-        <SocialMedia/>
-      </div>
+     
     
           
      
