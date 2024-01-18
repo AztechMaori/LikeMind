@@ -1,4 +1,5 @@
 export default function Headbar() {
+  const User_Auth = "Login";
   return (
     <>
       <header class="bg-black text-white p-4">
@@ -11,6 +12,12 @@ export default function Headbar() {
               LIKEMIND
             </a>
             <nav class="space-x-4">
+              <a
+                href="/auth/"
+                class="text-1xl font-bold text-blue-500 hover:text-yellow-500 transition-colors duration-300"
+              >
+                {User_Auth}
+              </a>
               <a
                 href="/"
                 class="text-1xl font-bold text-blue-500 hover:text-yellow-500 transition-colors duration-300"

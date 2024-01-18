@@ -56,22 +56,26 @@ export default function Login(props: Props) {
   }
 
   return (
-    <div class="min-h-screen flex items items-center justify-center ">
+    <div class="min-h-screen flex items-center justify-center bg">
+      {/* // */}
       {notif() && (
         <div class="fixed top-0 left-0 w-full bg-yellow-300 p-4 text-center">
           <p>{message()}</p>
         </div>
       )}
-      <form
-        onSubmit={handleLogin}
-        class="bg-white p-8 shadow-md rounded-md w-96"
-      >
-        <button onclick={() => props.setModal(false)} class=" mb-4">
-          go to SignIn
-        </button>
-        <h2 class="text-2xl font-bold mb-4">Login</h2>
+      {/* // */}
+      <form onSubmit={handleLogin} class="bg-slate  rounded-lg shadow-lg ">
+        <div class="flex justify-center">
+          <button
+            onClick={() => props.setModal(false)}
+            class="text-2xl font-bold mb-4 rounded-full p-2  pl-10 pr-10 bg-blue-400 text-white ease-in-out hover:bg-red-500 transition duration-300  transform hover:scale-105"
+          >
+            Login
+          </button>
+        </div>
+
         <div class="mb-4">
-          <label for="email" class="block text-gray-700 text-sm font-bold mb-2">
+          <label for="email" class="block text-white text-sm font-bold mb-2">
             Email
           </label>
           <input
@@ -84,10 +88,7 @@ export default function Login(props: Props) {
           />
         </div>
         <div class="mb-4">
-          <label
-            for="password"
-            class="block text-gray-700 text-sm font-bold mb-2"
-          >
+          <label for="password" class="block text-white text-sm font-bold mb-2">
             Password
           </label>
           <input
@@ -101,9 +102,9 @@ export default function Login(props: Props) {
         </div>
         <button
           type="submit"
-          class="bg-blue-500 text-white p-2 rounded-md w-full"
+          class="bg-blue-500 text-white p-1 rounded-md w-full ase-in-out hover:bg-red-500 transition duration-300  transform hover:scale-105 "
         >
-          Login
+          Submit
         </button>
       </form>
     </div>

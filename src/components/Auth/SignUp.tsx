@@ -82,39 +82,44 @@ export default function SignUp(props: Props) {
     }
   }
 
+  <button class=" p-0.5 pl-1 pr-1 rounded-full bg-slate-600 text-white transition duration-300 ease-in-out hover:bg-purple-700">
+    Go To Login
+  </button>;
+
   return (
-    <div class="min-h-screen flex items-center justify-center ">
+    <div class="min-h-screen flex items-center justify-center overflow-auto ">
       {notif() && (
         <div class="fixed top-0 left-0 w-full bg-yellow-300 p-4 text-center">
-          <p>Unauthorized</p>
+          <p>{message()}</p>
         </div>
       )}
       <form
         onSubmit={handleSignIn}
-        class="bg-white p-8 shadow-md rounded-md w-96"
+        class="bg-black p-8 w-96 rounded-lg shadow-lg"
       >
-        <button onClick={() => props.setModal(true)} class=" mb-4">
-          click here to go to Login
-        </button>
-        <h2 class="text-2xl font-bold mb-4">Sign Up</h2>
-        <div class="mb-4">
-          <label
-            for="username"
-            class="block text-gray-700 text-sm font-bold mb-2"
+        <div class="flex justify-center">
+          <button
+            onClick={() => props.setModal(true)}
+            class="text-2xl font-bold mb-4 rounded-full p-2 pr-10 pl-10 bg-blue-400 text-white ease-in-out hover:bg-red-500 transition duration-300  transform hover:scale-105"
           >
+            Sign Up
+          </button>
+        </div>
+        <div class="mb-4">
+          <label for="username" class="block text-white text-sm font-bold mb-2">
             Username
           </label>
           <input
             type="text"
             id="username"
-            class="w-full p-2 border border-gray-300 rounded-md"
+            class="w-full p-2  border border-gray-300 rounded-md"
             value={username()}
             onInput={(e) => setUsername(e.target.value)}
             required
           />
         </div>
         <div class="mb-4">
-          <label for="email" class="block text-gray-700 text-sm font-bold mb-2">
+          <label for="email" class="block text-white text-sm font-bold mb-2">
             Email
           </label>
           <input
@@ -129,7 +134,7 @@ export default function SignUp(props: Props) {
         <div class="mb-4">
           <label
             for="password"
-            class="block text-gray-700 text-sm font-bold mb-2"
+            class="block text-white  text-sm font-bold mb-2"
           >
             Password
           </label>
@@ -144,13 +149,11 @@ export default function SignUp(props: Props) {
         </div>
         <button
           type="submit"
-          class="bg-blue-500 text-white p-2 rounded-md w-full"
+          class="bg-blue-500 text-white p-2 rounded-md w-full ase-in-out hover:bg-red-500 transition duration-300  transform hover:scale-105"
         >
-          Sign Up
+          Submit
         </button>
       </form>
-      <button onClick={cookie_backend}>check if cookie exists</button>
-      <button onClick={trial}>check if middleware works</button>
     </div>
   );
 }
