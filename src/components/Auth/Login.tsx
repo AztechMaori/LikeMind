@@ -64,7 +64,10 @@ export default function Login(props: Props) {
         </div>
       )}
       {/* // */}
-      <form onSubmit={handleLogin} class="bg-slate  rounded-lg shadow-lg ">
+      <form
+        onSubmit={handleLogin}
+        class="bg-slate p-8 w-96  rounded-lg shadow-lg "
+      >
         <div class="flex justify-center">
           <button
             onClick={() => props.setModal(false)}
