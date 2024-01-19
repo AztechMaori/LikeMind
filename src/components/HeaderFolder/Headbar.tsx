@@ -30,12 +30,7 @@ export default function Headbar() {
               >
                 Trending
               </a>
-              <a
-                href="/jobspage/"
-                class="text-1xl font-bold text-blue-500 hover:text-yellow-500 transition-colors duration-300"
-              >
-                Jobs
-              </a>
+
               <a
                 href="/profilepage/"
                 class="text-1xl font-bold text-blue-500 hover:text-yellow-500 transition-colors duration-300"

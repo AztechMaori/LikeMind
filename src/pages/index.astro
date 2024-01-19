@@ -1,9 +1,6 @@
 ---
 import Headbar from '../components/HeaderFolder/Headbar';
-import SignUp from '../components/Auth/SignUp'
-import Login from '../components/Auth/Login';
-import LS from '../components/Auth/LS';
-
+import ProjectScrollBar from "../components/HomePageFolder/Project"
 ---
 
 
@@ -15,7 +12,16 @@ import LS from '../components/Auth/LS';
 
     </head>
     <body >
-    <Headbar client:load/>
+        <div class=" grid-rows-5">
+            <div class="row-span-1 bg-teal-400">
+                <Headbar client:load/>
+            </div>
+            <div class="row-span-3 bg-red-400">
+                <ProjectScrollBar client:load   />
+            </div>
+            <div class="row-span-1 bg-green-500">footer</div>
+        </div>
+    
     
      
       

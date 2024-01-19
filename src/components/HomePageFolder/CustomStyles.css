@@ -1,0 +1,28 @@
+::-webkit-scrollbar {
+  width: 8px; /* Adjust the width as needed */
+  overflow-x: scroll;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #fff; /* Color of the scrollbar thumb */
+  border-radius: 4px; /* Make it rounded */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #555; /* Color on hover */
+}
+
+html {
+  scrollbar-width: thin;
+  scrollbar-color: #ddd #fff; /* Track color and thumb color */
+}
+
+/* Thumb styles */
+html:hover {
+  scrollbar-color: #555 #fff; /* Track color and thumb color on hover */
+}
+
+/* Optional: Add smooth scrolling behavior */
+body {
+  scroll-behavior: smooth;
+}

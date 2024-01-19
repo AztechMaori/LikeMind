@@ -56,7 +56,7 @@ export default function Login(props: Props) {
   }
 
   return (
-    <div class="min-h-screen flex items-center justify-center bg">
+    <div class="min-h-screen flex items-center justify-center bg overflow-auto">
       {/* // */}
       {notif() && (
         <div class="fixed top-0 left-0 w-full bg-yellow-300 p-4 text-center">
@@ -66,7 +66,7 @@ export default function Login(props: Props) {
       {/* // */}
       <form
         onSubmit={handleLogin}
-        class="bg-slate p-8 w-96  rounded-lg shadow-lg "
+        class="bg-black p-8 w-96  rounded-lg shadow-lg "
       >
         <div class="flex justify-center">
           <button
