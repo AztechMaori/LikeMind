@@ -1,5 +1,5 @@
 import ProjectItem from "./ProjectItem";
-import "./CustomStyles.css";
+import NewIdea from "./newidea";
 
 interface ProjectScrollBarProps {
   posts: [];
@@ -7,7 +7,7 @@ interface ProjectScrollBarProps {
 }
 
 export default function ProjectScrollBar() {
-  let array = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+  let array = [1, 2, 3, 4, 5, 6];
   let Title = "Popular";
   return (
     <>
@@ -20,7 +20,9 @@ export default function ProjectScrollBar() {
         <div>
           <div class=" flex flex-row gap-4 ml-2 mt-6 mb-6">
             {array.map((number, index) => (
-              <ProjectItem />
+              //<ProjectItem />
+              <NewIdea />
+
             ))}
           </div>
         </div>
