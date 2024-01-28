@@ -12,6 +12,7 @@ export default function Headbar() {
               LIKEMIND
             </a>
             <nav class="space-x-4">
+              <button class=" border rounded-full  p-1 pr-3 pl-3 min-h-fit min-w-fit text-2xl lg:mr-3 font-bold text-blue-500 hover:text-yellow-500 hover:border-yellow-500 transition-colors duration-300">+</button>
               <a
                 href="/auth/"
                 class="text-1xl font-bold text-blue-500 hover:text-yellow-500 transition-colors duration-300"
@@ -28,14 +29,14 @@ export default function Headbar() {
                 href="/trendingpage/"
                 class="text-1xl font-bold text-blue-500 hover:text-yellow-500 transition-colors duration-300"
               >
-                Trending
+                Profile
               </a>
 
               <a
                 href="/profilepage/"
                 class="text-1xl font-bold text-blue-500 hover:text-yellow-500 transition-colors duration-300"
               >
-                Profile
+                Statistics
               </a>
             </nav>
           </div>
