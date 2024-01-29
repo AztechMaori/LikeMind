@@ -1,5 +1,3 @@
-use std::i32;
-
 use axum::{http::StatusCode, Extension, Json};
 use axum_extra::extract::{cookie::Cookie, CookieJar};
 
@@ -99,7 +97,7 @@ pub async fn login(
                                     Ok(_) => {
                                         println!("refresh token succesfully renewed!");
                                         let auth_cookie =
-                                            Cookie::build(("auth", a_token)).http_only(false);
+                                            Cookie::build(("auth", a_token)).http_only(true);
                                         Ok(jar.add(auth_cookie))
                                     }
                                     Err(error) => {
