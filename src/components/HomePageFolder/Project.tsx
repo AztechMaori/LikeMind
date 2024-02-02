@@ -1,11 +1,11 @@
 import ProjectItem from "./newidea";
-
+import "./scroll.css"
 interface ProjectScrollBarProps {
   title: String;
 }
 
 export default function ProjectScrollBar(props: ProjectScrollBarProps) {
-  let array = [1, 2, 3, 4, 5, 6];
+  let array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   let Title: String = props.title;
   return (
@@ -15,9 +15,9 @@ export default function ProjectScrollBar(props: ProjectScrollBarProps) {
           {Title}
         </div>
       </h3>
-      <div class="flex flex-col gap-4 bg-blue-600 overflow-x-auto custom-scrollbar">
+      <div class="flex flex-col gap-4 bg-blue-600  ">
         <div>
-          <div class=" flex flex-row gap-4 ml-2 mt-6 mb-6">
+          <div class=" flex flex-row  gap-4 ml-2 mt-6 mb-6 overflow-auto trial ">
             {array.map((number, index) => (
               <ProjectItem />
             ))}

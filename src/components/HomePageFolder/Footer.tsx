@@ -7,7 +7,7 @@ export default function Footer() {
       <button class="font-bold text-lg border rounded-full w-20 h-10 pr-2 pl-2 min-h-fit min-w-fit mt-5 hover:text-emerald-500 duration-300"> Social </button>
       <button class="font-bold text-lg border rounded-full w-20 h-10 pr-2 pl-2 min-h-fit min-w-fit mt-5 hover:text-emerald-500 duration-300"> Business </button>
       <button class="font-bold text-lg border rounded-full w-20 h-10 pr-2 pl-2 min-w-fit min-h-fit mt-5 hover:text-emerald-500 duration-300"> Gaming </button>
-      <button class="font-bold text-lg border rounded-full w-20 h-10 pr-2 pl-2X min-w fit min-h-fit mt-5 hover:text-emerald-500 duration-300"> Sport </button>
+      <button class="font-bold text-lg border rounded-full w-20 h-10 pr-2 pl-2 min-w fit min-h-fit mt-5 hover:text-emerald-500 duration-300"> Sport </button>
     </div >
   )
 }

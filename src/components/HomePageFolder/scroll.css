@@ -1,0 +1,32 @@
+/* custom-styles.css */
+
+.trial {
+  touch-action: pan-x;
+  /* Add any other custom styles */
+
+  /* Ensure the scrollbar is visible */
+  overflow-x: auto;
+  scrollbar-width: thin;
+  /* Firefox */
+  scrollbar-color: darkgray lightgray;
+  /* Firefox */
+
+}
+
+.trial::-webkit-scrollbar {
+  width: 6px;
+
+  /* WebKit */
+}
+
+.trial::-webkit-scrollbar-thumb {
+  background-color: yellowgreen;
+  border-radius: 6px;
+  /* WebKit */
+}
+
+.trial::-webkit-scrollbar-track {
+  background-color: black;
+  border-radius: 6px;
+  /* WebKit */
+}
