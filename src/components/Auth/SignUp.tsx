@@ -81,13 +81,10 @@ export default function SignUp(props: Props) {
       console.log(`there was an error, ${err}`);
     }
   }
-
-  <button class=" p-0.5 pl-1 pr-1 rounded-full bg-slate-600 text-white transition duration-300 ease-in-out hover:bg-purple-700">
-    Go To Login
-  </button>;
+  ;
 
   return (
-    <div class="min-h-screen flex items-center justify-center overflow-auto ">
+    <div class=" min-h-screen bg-black flex items-center justify-center overflow-auto ">
       {notif() && (
         <div class="fixed top-0 left-0 w-full bg-yellow-300 p-4 text-center">
           <p>{message()}</p>

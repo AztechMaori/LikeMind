@@ -7,7 +7,7 @@ export default function LS() {
 
   return (
     <>
-      <div class=" flex flex-col ">
+      <div class=" flex flex-col bg-black  ">
         {modal() ? (
           <Login setModal={setModal} />
         ) : (

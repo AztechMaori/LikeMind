@@ -1,5 +1,12 @@
-export default function Headbar() {
-  const User_Auth = "Login";
+import Logout from "./logout";
+import ProjectCreationModal from "./CreateProject";
+
+interface HeadbarProps {
+  authenticated: boolean;
+}
+
+export default function Headbar(props: HeadbarProps) {
+
   return (
     <>
       <header class="bg-black text-white p-4">
@@ -12,13 +19,14 @@ export default function Headbar() {
               LIKEMIND
             </a>
             <nav class="space-x-4">
-              <button class=" border rounded-full  p-1 pr-3 pl-3 min-h-fit min-w-fit text-2xl lg:mr-3 font-bold text-blue-500 hover:text-yellow-500 hover:border-yellow-500 transition-colors duration-300">+</button>
-              <a
-                href="/auth/"
-                class="text-1xl font-bold text-blue-500 hover:text-yellow-500 transition-colors duration-300"
-              >
-                {User_Auth}
-              </a>
+              {props.authenticated ? <ProjectCreationModal /> : (null)}
+              {props.authenticated ? (<Logout />) : (
+
+                <a
+                  href="/auth/"
+                  class="text-1xl font-bold text-blue-500 hover:text-yellow-500 transition-colors duration-300"
+                >
+                  Login </a>)}
               <a
                 href="/"
                 class="text-1xl font-bold text-blue-500 hover:text-yellow-500 transition-colors duration-300"

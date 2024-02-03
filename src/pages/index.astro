@@ -1,7 +1,5 @@
 ---
-import Headbar from '../components/HeaderFolder/Headbar';
-import ProjectScrollBar from "../components/HomePageFolder/Project"
-import Footer from "../components/HomePageFolder/Footer.tsx"
+import HomepageWrapper from "../components/HomePageFolder/Homepage.tsx"
 ---
 
 
@@ -13,18 +11,8 @@ import Footer from "../components/HomePageFolder/Footer.tsx"
 
     </head>
     <body >
-        <div class=" grid-rows-5 bg-black">
-            <div class="row-span-1 bg-teal-400">
-                <Headbar client:load/>
-            </div>
-            <div class="row-span-3 bg-blue-400">
-                <ProjectScrollBar title={"Highest-Rated"}  client:load   />
-                <ProjectScrollBar title = {"For You"} client:load/>
-                <ProjectScrollBar title = {"Yours"} client:load/>
-                <Footer client:load/>
-            </div>
-        </div>
-    
+  
+   <HomepageWrapper client:load/> 
     
      
       
