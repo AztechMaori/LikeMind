@@ -15,7 +15,7 @@ export default function Login(props: Props) {
 
     const timeout = setTimeout(() => {
       setNotif(false);
-    }, 1300);
+    }, 1500);
 
     onCleanup(() => {
       clearTimeout(timeout);
@@ -49,6 +49,8 @@ export default function Login(props: Props) {
       } else if (res.status == 500) {
         setMessage("INTERNL SERVER ERROR");
         Notification();
+      } else {
+        window.location.href = "http://localhost:4321"
       }
     } catch (err) {
       console.log(`there was an error: ${err}`);

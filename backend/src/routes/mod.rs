@@ -45,8 +45,7 @@ pub fn create_routes(database: Pool<Postgres>) -> Router {
         .route_layer(middleware::from_fn(auth_guard))
         .route("/login", post(login))
         .route("/signup", post(sign_up))
-        .route("/logout", post(logout))
+        .route("/logout", get(logout))
         .layer(Extension(database))
         .layer(cors);
 }
-

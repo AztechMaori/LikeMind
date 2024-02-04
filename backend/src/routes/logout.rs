@@ -1,6 +1,8 @@
+use std::ptr::null;
+
 use axum::{http::StatusCode, Extension};
 use axum_extra::extract::{cookie::Cookie, CookieJar};
-use sqlx::{PgPool, Pool, Postgres};
+use sqlx::{Pool, Postgres};
 use uuid::Uuid;
 
 use crate::utils::decode_access_token;
@@ -14,7 +16,7 @@ use crate::utils::decode_access_token;
 
 async fn delete_refresh_token(
     id: Uuid,
-    db: &PgPool,
+    db: &Pool<Postgres>,
 ) -> Result<sqlx::postgres::PgQueryResult, sqlx::Error> {
     let query = "UPDATE users SET refresh_token = $1 WHERE id = $2";
 
@@ -26,6 +28,7 @@ pub async fn logout(
     Extension(database): Extension<Pool<Postgres>>,
     jar: CookieJar,
 ) -> Result<CookieJar, StatusCode> {
+    println!("auth");
     let token = jar.get("auth").map(|token| token.value().to_owned());
 
     match token {
@@ -36,12 +39,13 @@ pub async fn logout(
                 Ok(data) => {
                     let user_id = data.claims.id;
                     let result = delete_refresh_token(user_id, &database).await;
+                    println!("succesfully deleted refresh token");
 
                     match result {
                         Ok(_) => {
                             //clear cookie
-                            let auth_cookie = Cookie::build(("auth", "")).http_only(true);
-                            Ok(jar.add(auth_cookie))
+                            println!("succesfully logged out");
+                            Ok(jar.remove(Cookie::from("auth")))
                         }
                         Err(error) => {
                             println!("there was an error logging you out: {}", error);
@@ -57,7 +61,7 @@ pub async fn logout(
         }
         None => {
             println!("You are already logged out");
-            Err(StatusCode::SERVICE_UNAVAILABLE)
+            Err(StatusCode::INTERNAL_SERVER_ERROR)
         }
     }
 }

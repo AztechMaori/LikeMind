@@ -19,8 +19,7 @@ export default function Headbar(props: HeadbarProps) {
               LIKEMIND
             </a>
             <nav class="space-x-4">
-              {props.authenticated ? <ProjectCreationModal /> : (null)}
-              {props.authenticated ? (<Logout />) : (
+              {props.authenticated ? <ProjectCreationModal /> : (null)} {props.authenticated ? (<Logout />) : (
 
                 <a
                   href="/auth/"

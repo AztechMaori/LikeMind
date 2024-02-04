@@ -16,7 +16,7 @@ export default function SignUp(props: Props) {
 
     const timeout = setTimeout(() => {
       setNotif(false);
-    }, 1300);
+    }, 1500);
 
     onCleanup(() => {
       clearTimeout(timeout);
@@ -54,6 +54,9 @@ export default function SignUp(props: Props) {
       } else if (response.status == 500) {
         setMessage("INTERNAL SERVER ERROR");
         Notification();
+      }
+      else {
+        window.location.href = "http://localhost:4321"
       }
     } catch (err) {
       console.log(err);
